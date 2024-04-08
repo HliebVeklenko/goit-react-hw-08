@@ -1,0 +1,25 @@
+.card {
+  border: solid 2px gray;
+  border-radius: 4px;
+
+  display: flex;
+
+  padding: 10px;
+
+  height: 60px;
+  width: 240px;
+
+  justify-content: space-between;
+  align-items: center;
+}
+
+.contacts {
+  display: flex;
+  flex-direction: column;
+}
+
+.button {
+  /* margin-left: px; */
+  width: 70px;
+  height: 30px;
+}
