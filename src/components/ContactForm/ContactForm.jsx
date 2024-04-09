@@ -1,11 +1,13 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import css from "./ContactForm.module.css";
-import { useDispatch } from "react-redux";
-import { addContact } from "../../redux/contactsOps";
+import { useDispatch, useSelector } from "react-redux";
+import { addContact } from "../../redux/contacts/operations";
+import { selectContacts } from "../../redux/contacts/selectors";
 
 function ContactForm() {
   const dispatch = useDispatch();
+  const contacts = useSelector(selectContacts);
 
   const contactPattern = Yup.object().shape({
     name: Yup.string()
@@ -23,9 +25,19 @@ function ContactForm() {
     number: "",
   };
 
-  const handleSubmit = (values, actions) => {
-    actions.resetForm();
-    dispatch(addContact(values));
+  const handleSubmit = (values, action) => {
+    if (
+      contacts.find(
+        (contact) =>
+          contact.name.toLowerCase() === values.name.toLowerCase() ||
+          contact.number === values.number
+      )
+    ) {
+      action.resetForm();
+      console.log("error");
+    }
+    dispatch(addContact(values)).unwrap();
+    action.resetForm();
   };
 
   return (
@@ -45,7 +57,7 @@ function ContactForm() {
         <div className={css.input}>
           <label className={css.label}>
             Number
-            <Field type="text" name="number" />
+            <Field className={css.field} type="text" name="number" />
           </label>
           <ErrorMessage name="number" as="span" />
         </div>
